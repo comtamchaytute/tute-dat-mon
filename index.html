@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đặt món — Cơm Tấm Chay TUTE</title>
+<meta name="description" content="Chọn ứng dụng để đặt Cơm Tấm Chay TUTE: ShopeeFood, GrabFood, BeFood, Xanh SM Ngon.">
+<style>
+  :root {
+    --nen: #f3f6f4; --chu: #1d2b1f; --phu: #5b6b5e; --the: #ffffff; --vien: #e1e8e3;
+    --xanh-duong: #1146d0; --xanh-la: #1fb35a;
+    --canh-bao: #fff6d8; --canh-bao-vien: #f0d67a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--nen); color: var(--chu);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  /* Đầu trang chuyển màu xanh dương sang xanh lá giống logo TUTE */
+  header {
+    background: linear-gradient(160deg, var(--xanh-duong) 0%, #2a8fb8 55%, var(--xanh-la) 100%);
+    padding: 34px 16px 30px; text-align: center; color: #fff;
+  }
+  header img { width: 240px; max-width: 75%; height: auto; display: block; margin: 0 auto; }
+  main { max-width: 440px; margin: 0 auto; padding: 22px 16px 40px; }
+  h1 { font-size: 20px; text-align: center; margin: 0 0 18px; }
+  .nut {
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    background: var(--the); border: 1px solid var(--vien); border-radius: 16px;
+    padding: 12px 16px; margin-bottom: 12px; text-decoration: none; color: var(--chu);
+    font-size: 19px; font-weight: 600; box-shadow: 0 2px 6px rgba(17,70,40,.06);
+  }
+  .nut:active { transform: scale(.98); background: #f7fbf8; }
+  .nut img {
+    width: 52px; height: 52px; border-radius: 12px; object-fit: contain;
+    background: #fff; border: 1px solid var(--vien); flex: none;
+  }
+  .mui { margin-left: auto; color: var(--xanh-la); font-size: 26px; font-weight: 400; }
+  /* Hướng dẫn thoát Zalo: chỉ hiện khi mở trong Zalo mà chưa nhảy được sang app */
+  #huong-dan {
+    display: none; background: var(--canh-bao); border: 1px solid var(--canh-bao-vien);
+    border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; font-size: 16px; line-height: 1.5;
+  }
+  #huong-dan.hien { display: block; }
+  #huong-dan .to { font-size: 18px; font-weight: 700; }
+  #mui-ten {
+    display: none; position: fixed; top: 4px; right: 14px; font-size: 40px;
+    animation: nhun 1s ease-in-out infinite; z-index: 9;
+  }
+  #mui-ten.hien { display: block; }
+  @keyframes nhun { 50% { transform: translateY(-8px); } }
+  .ghi-chu { text-align: center; color: var(--phu); font-size: 14px; margin-top: 18px; }
+</style>
+</head>
+<body>
+<div id="mui-ten" aria-hidden="true">👆</div>
+<header><img src="hinh/tute-trang.png" alt="TUTE · Cơm Tấm Chay · Hương Vị Sài Gòn Tử Tế"></header>
+<main>
+  <div id="huong-dan" role="alert">
+    <div class="to">Zalo chưa cho mở ứng dụng 🙏</div>
+    Bấm <b>⋯</b> ở góc phải phía trên → chọn <b>“Mở bằng trình duyệt”</b>
+    (hoặc “Mở trong Safari”), rồi chọn lại ứng dụng bên dưới.
+  </div>
+
+  <h1>Anh/chị đặt món qua ứng dụng nào?</h1>
+
+  <a class="nut" href="https://shopeefood.vn/u/ewSUtmV"><img src="hinh/shopee.png" alt="">ShopeeFood<span class="mui">›</span></a>
+  <a class="nut" href="https://r.grab.com/o/ZfERvMne"><img src="hinh/grab.jpg" alt="">GrabFood<span class="mui">›</span></a>
+  <a class="nut" href="https://begroup.onelink.me/ZOqn/ie3ye2uk"><img src="hinh/be.jpg" alt="">BeFood<span class="mui">›</span></a>
+  <a class="nut" href="https://xanhsmngon.onelink.me/14WJ/1l1liqq9"><img src="hinh/xanhsm.png" alt="">Xanh SM Ngon<span class="mui">›</span></a>
+
+  <p class="ghi-chu">Bấm là mở thẳng trang quán TUTE trong ứng dụng.</p>
+</main>
+<script>
+  // Zalo mở link bằng trình duyệt riêng bên trong Zalo, và trình duyệt này chặn việc
+  // nhảy sang app khác (Grab, Shopee...). Khi đang ở trong Zalo, mỗi nút sẽ nhờ trình
+  // duyệt thật mở link của sàn: Safari trên iPhone, Chrome trên Android. Ra trình duyệt
+  // thật thì link sàn tự mở app. Nếu Zalo chặn luôn cả bước này thì sau 1,5 giây trang
+  // vẫn còn hiện, lúc đó hiện hướng dẫn bấm ⋯ để tự mở bằng trình duyệt.
+  (function () {
+    var ua = navigator.userAgent || "";
+    if (!/zalo/i.test(ua)) return; // ngoài Zalo: link bình thường là chạy
+
+    var laIphone = /iPhone|iPad|iPod/i.test(ua);
+    var laAndroid = /Android/i.test(ua);
+
+    function linkTrinhDuyetThat(link) {
+      if (laIphone) return "x-safari-" + link; // iOS 17 trở lên: mở link bằng Safari
+      if (laAndroid) {
+        var u = new URL(link);
+        return "intent://" + u.host + u.pathname + u.search +
+          "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" +
+          encodeURIComponent(link) + ";end";
+      }
+      return link;
+    }
+
+    function hienHuongDan() {
+      document.getElementById("huong-dan").classList.add("hien");
+      document.getElementById("mui-ten").classList.add("hien");
+      window.scrollTo(0, 0);
+    }
+
+    document.querySelectorAll("a.nut").forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        window.location.href = linkTrinhDuyetThat(a.href);
+        // Nhảy sang Safari/Chrome thành công thì trang bị ẩn; còn hiện tức là bị chặn.
+        setTimeout(function () { if (!document.hidden) hienHuongDan(); }, 1500);
+      });
+    });
+  })();
+</script>
+</body>
+</html>
